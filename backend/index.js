@@ -18,7 +18,7 @@ const _dirname = path.resolve();
 const app=express();
 
 const PORT=process.env.PORT||7000
-app.use(cors({ origin: '*'}));
+app.use(cors({ origin: 'https://blooddonor-web-1.onrender.com'}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.static('uploads'))

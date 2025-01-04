@@ -14,7 +14,7 @@ const LocationForm = () => {
   // Fetch Countries
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/locations/countries") // Update with your backend endpoint
+      .get("https://blooddonor-web-1.onrender.com/api/locations/countries") // Update with your backend endpoint
       .then((response) => setCountries(response.data))
       .catch((error) => console.error("Error fetching countries:", error));
   }, []);
@@ -23,7 +23,7 @@ const LocationForm = () => {
   useEffect(() => {
     if (selectedCountry) {
       axios
-        .get(`http://localhost:3000/api/locations/countries/${selectedCountry}/regions`)
+        .get(`https://blooddonor-web-1.onrender.com/api/locations/countries/${selectedCountry}/regions`)
         .then((response) => setStates(response.data))
         .catch((error) => console.error("Error fetching states:", error));
     } else {
@@ -35,7 +35,7 @@ const LocationForm = () => {
   useEffect(() => {
     if (selectedState) {
       axios
-        .get(`http://localhost:3000/api/locations/regions/${selectedState}/cities`)
+        .get(`https://blooddonor-web-1.onrender.com/api/locations/regions/${selectedState}/cities`)
         .then((response) => setCities(response.data))
         .catch((error) => console.error("Error fetching cities:", error));
     } else {
