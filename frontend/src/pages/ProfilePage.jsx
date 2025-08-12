@@ -110,9 +110,8 @@ const ProfilePage = () => {
     
 
     try {
-      const response = await axios.post("/auth/profile/update", {
-        field: "available",
-        value: newAvailability,
+      const response = await axios.put("/auth/update-availability", {
+        available: newAvailability,
       });
       
       getProfile(); // Refresh profile data
@@ -207,7 +206,12 @@ const ProfilePage = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-gray-500">Available for Donation</p>
+              <div>
+                <p className="text-sm font-medium text-gray-500">Available for Donation</p>
+                <p className="text-xs text-gray-400 mt-1">
+                  {isAvailable ? "✅ You are visible to people searching for donors" : "❌ You are not visible to people searching for donors"}
+                </p>
+              </div>
               <Switch checked={isAvailable} onChange={() => handleAvailabilityChange(!isAvailable)} />
             </div>
 

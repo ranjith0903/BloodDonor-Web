@@ -86,14 +86,49 @@ const FindDonors = () => {
         </div>
       )}
       {donors?.length ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-          {donors.map((donor) => (
-            <BloodDonorCard donor={donor} key={donor._id} />
-          ))}
+        <>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-blue-800">Privacy Protected</h3>
+                <div className="mt-2 text-sm text-blue-700">
+                  <p>Donor contact information is protected. Click "Request Contact" to send a secure request. Donors will only share their contact details after approving your request.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+            {donors.map((donor) => (
+              <BloodDonorCard donor={donor} key={donor._id} />
+            ))}
+          </div>
+        </>
+      ) : donors && donors.length === 0 ? (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-8 max-w-lg mx-auto text-center">
+          <div className="flex items-center justify-center mb-4">
+            <svg className="h-8 w-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-medium text-yellow-800 mb-2">No Available Donors Found</h3>
+          <p className="text-yellow-700 mb-4">
+            No donors are currently available for {bloodType} blood type within {distance}km of your location.
+          </p>
+          <div className="text-sm text-yellow-600">
+            <p>💡 <strong>Tips:</strong></p>
+            <ul className="mt-2 space-y-1">
+              <li>• Try increasing the search distance</li>
+              <li>• Check if donors have set themselves as available</li>
+              <li>• Consider other blood types that are compatible</li>
+            </ul>
+          </div>
         </div>
-      ) : (
-        <p className="text-center text-gray-600 mt-8">No donors found.</p>
-      )}
+      ) : null}
     </>
   );
 };

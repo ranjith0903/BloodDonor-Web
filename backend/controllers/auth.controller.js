@@ -1,5 +1,7 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
+
+
 const generateTokens=(userid)=>{
     const accessToken=jwt.sign({userid},process.env.ACCESS_TOKEN_SECRET,{expiresIn:"15m"})
     const refreshToken=jwt.sign({userid},process.env.REFRESH_TOKEN_SECRET,{expiresIn:"7d"})
@@ -107,7 +109,7 @@ export const logoutUser=async (req,res)=>{
 export const getProfile=(req,res)=>{
    try {
      const user=req.user;
-     if(!user){z
+     if(!user){
          return res.status(500).json({
              message: "No user found"
  
@@ -120,6 +122,51 @@ export const getProfile=(req,res)=>{
     
    }
 }
+
+export const updateAvailability = async (req, res) => {
+    try {
+        const { available } = req.body;
+        const user = req.user;
+
+        if (typeof available !== 'boolean') {
+            return res.status(400).json({ message: "Available must be a boolean value" });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            user._id,
+            { available },
+            { new: true }
+        ).select("-password -refreshToken");
+
+        return res.status(200).json({
+            message: `Successfully ${available ? 'made available' : 'made unavailable'}`,
+            user: updatedUser
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+// Admin function to make all users available (for testing)
+export const makeAllUsersAvailable = async (req, res) => {
+    try {
+        const result = await User.updateMany(
+            {},
+            { available: true }
+        );
+
+        return res.status(200).json({
+            message: `Made ${result.modifiedCount} users available`,
+            modifiedCount: result.modifiedCount
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
 
 
 

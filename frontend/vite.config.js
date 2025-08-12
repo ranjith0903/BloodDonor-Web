@@ -7,7 +7,7 @@ export default defineConfig({
 	server: {
 		proxy: {
 			"/api": {
-				target: "https://blooddonor-web-1.onrender.com",
+				target: "http://localhost:7000",
 				
 			},
 		},

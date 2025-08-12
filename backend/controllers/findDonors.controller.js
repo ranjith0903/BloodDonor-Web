@@ -25,6 +25,7 @@ export const findDonors = async (req, res) => {
         const donors = await User.find({
             _id: { $ne: user._id },
             bloodType: bloodType,
+            available: true, // Only return available donors
             location: {
                 $near: {
                     $geometry: {

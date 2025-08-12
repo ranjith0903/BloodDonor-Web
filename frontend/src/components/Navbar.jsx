@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Disclosure,
@@ -11,13 +11,21 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useUserStore } from "../store/useUserStore";
+import axios from "../lib/axios";
 
-const navigation = [
-  { name: "Home", href: "/", current: true },
-  { name: "Find Donors", href: "/findDonors", current: false },
-  { name: "Register Campaigns", href: "/registerCampaign", current: false },
-  { name: "About", href: "/about", current: false },
-];
+  const navigation = [
+    { name: "Home", href: "/", current: true },
+    { name: "Find Donors", href: "/findDonors", current: false },
+    { name: "Schedule Donation", href: "/schedule-donation", current: false },
+    { name: "Emergency Calls", href: "/emergency-calls", current: false },
+    { name: "Emergency Alerts", href: "/emergency-alerts", current: false },
+    { name: "Blood Banks", href: "/blood-banks", current: false },
+    { name: "Contact Requests", href: "/contact-requests", current: false },
+    { name: "Analytics", href: "/analytics", current: false },
+    { name: "Achievements", href: "/achievements", current: false },
+    { name: "Register Campaigns", href: "/registerCampaign", current: false },
+    { name: "About", href: "/about", current: false },
+  ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -26,10 +34,38 @@ function classNames(...classes) {
 export default function Navbar() {
   const { user, checkAuth, logout } = useUserStore();
   const admin = user?.role === "admin";
+  const [hasRingingCalls, setHasRingingCalls] = useState(false);
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  // Check for ringing calls
+  useEffect(() => {
+    if (!user) return;
+
+    const checkRingingCalls = async () => {
+      try {
+        const response = await axios.get("/emergency-calls/active");
+        const calls = response.data.data || [];
+        
+        const ringingCalls = calls.filter(call => 
+          call.status === "ringing" &&
+          call.donorResponses?.some(dr => 
+            dr.donorId === user._id && dr.status === "ringing"
+          )
+        );
+        
+        setHasRingingCalls(ringingCalls.length > 0);
+      } catch (error) {
+        console.error("Error checking ringing calls:", error);
+      }
+    };
+
+    checkRingingCalls();
+    const interval = setInterval(checkRingingCalls, 2000);
+    return () => clearInterval(interval);
+  }, [user]);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -89,6 +125,16 @@ export default function Navbar() {
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {user ? (
               <>
+                {/* Emergency Call Indicator */}
+                {hasRingingCalls && (
+                  <div className="mr-4 relative">
+                    <div className="animate-pulse bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center">
+                      <span className="mr-1">🚨</span>
+                      EMERGENCY CALL
+                    </div>
+                  </div>
+                )}
+                
                 {admin && (
                   <Link to="/admin">
                     <button className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium mr-2">

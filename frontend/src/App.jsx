@@ -20,6 +20,16 @@ import DeleteCampaign from "./pages/DeleteCampaign";
 
 import { BloodStatsPage } from "./pages/BloodStatsPage";
 import About from "./pages/About";
+import AIPredictionsPage from "./pages/AIPredictionsPage";
+import AdvancedAnalytics from "./components/AdvancedAnalytics";
+import AchievementsPage from "./pages/AchievementsPage";
+import BloodBankFinder from "./pages/BloodBankFinder.jsx";
+import ContactRequests from "./pages/ContactRequests.jsx";
+import EmergencyAlertPage from "./pages/EmergencyAlertPage.jsx";
+import EmergencyCallPage from "./pages/EmergencyCallPage.jsx";
+import EmergencyCallNotifier from "./components/EmergencyCallNotifier.jsx";
+import DonationSchedulerPage from "./pages/DonationSchedulerPage.jsx";
+
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -52,6 +62,15 @@ function App() {
 
         <Route path="/findDonors" element={<FindDonors />}></Route>
         <Route path="/findCampaign" element={<FindCampaign />}></Route>
+        <Route path="/ai-predictions" element={<AIPredictionsPage />}></Route>
+        <Route path="/analytics" element={<AdvancedAnalytics />}></Route>
+        <Route path="/achievements" element={<AchievementsPage />}></Route>
+        <Route path="/blood-banks" element={<BloodBankFinder />}></Route>
+        <Route path="/contact-requests" element={<ContactRequests />}></Route>
+        <Route path="/emergency-alerts" element={<EmergencyAlertPage />}></Route>
+        <Route path="/emergency-calls" element={<EmergencyCallPage />}></Route>
+        <Route path="/schedule-donation" element={<DonationSchedulerPage />}></Route>
+
         <Route
           path="/findStats"
           element={user?.role === "admin" ? <FindStats /> : <Navigate to="/" />}
@@ -81,9 +100,15 @@ function App() {
             user?.role === "admin" ? <BloodStatsPage /> : <Navigate to="/" />
           }
         />
-        <Route path="/about" element={<About />} />
+        <Route
+          path="/about"
+          element={<About />}
+        />
       </Routes>
-      <Toaster />
+
+      {/* Global Components */}
+      <EmergencyCallNotifier />
+      <Toaster position="top-right" />
     </>
   );
 }

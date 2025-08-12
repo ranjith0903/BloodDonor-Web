@@ -4,7 +4,7 @@ import User from "../models/user.model.js";
 import cloudinary from 'cloudinary';
 import dotenv from 'dotenv';
 import NodeGeocoder from 'node-geocoder';
-import { getProfile, registerUser } from "../controllers/auth.controller.js";
+import { getProfile, registerUser, updateAvailability, makeAllUsersAvailable } from "../controllers/auth.controller.js";
 import {loginUser,logoutUser} from "../controllers/auth.controller.js"
 import { protectRoute } from "../middleware/auth.middleware.js"
 dotenv.config();
@@ -108,6 +108,8 @@ router.delete('/profile/delete',protectRoute,async (req, res) => {
 router.post("/signup",registerUser);
 router.post("/login",loginUser);
 router.post("/logout",logoutUser);
-router.get("/get-profile",protectRoute,getProfile)
+router.get("/get-profile",protectRoute,getProfile);
+router.put("/update-availability", protectRoute, updateAvailability);
+router.post("/make-all-available", makeAllUsersAvailable); // For testing - no auth required
 
 export default router
